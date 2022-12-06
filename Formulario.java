@@ -9,7 +9,6 @@ import javax.swing.JTable;
 import javax.swing.JScrollPane;
 
 import javax.swing.JTabbedPane;
-import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.TitledBorder;
@@ -19,12 +18,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-import jbarcodebean.JBarcodeBean;
-
-import java.awt.image.BufferedImage;
 import java.io.File;
 import javax.swing.JFileChooser;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.event.ActionEvent;
@@ -59,19 +54,18 @@ public class Formulario extends JFrame implements ActionListener{
     private JButton botonActualizar, botonExportar;
 
     //elementos de ventana panel 3
-    private JLabel label3, label4, label5, label6, labelCodBar;
+    private JLabel label3, label4, label5, label6;
     private JTextField campoNom, campoAP, campoAM, campoSaldo;
     private JPanel panel3, panel4;
     private TitledBorder title3, title4;
     private DefaultTableModel modelo2;
     private JTable tablaUsuarios;
     private JScrollPane scroll2;
-    private JButton botonAlta, botonGuardar;
-    private BufferedImage imageCodigoBarras;
+    private JButton botonAlta, botonActualizar2;
 
     //elementos de ventana panel 4
     public JTextField campoBusqedaEdit, campoNomE, campoAPE, campoAME, campoSaldoE, campoIDE;
-    private JLabel label7, label8, label9, label10, label11, label12, labelCodBarE;
+    private JLabel label7, label8, label9, label10, label11, label12;
     private JButton botonEliminar, botonEditar, botonGuardarE;
     private TitledBorder title5, title6, title7;
     private JPanel panel5, panel6, panel7;
@@ -290,9 +284,57 @@ public class Formulario extends JFrame implements ActionListener{
         altasPan = new JPanel();
         altasPan.setLayout(null);
 
+        //elementos de panel 4
+        panel4 = new JPanel();
+        panel4.setBounds(10, 20, 635, 150);
+
+        title4 = BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Datos de usuario");
+        title4.setTitlePosition(TitledBorder.ABOVE_TOP);
+        panel4.setBorder(title4);
+        panel4.setLayout(null);
+
+        label3 = new JLabel("Nombre(s)");
+        label3.setBounds(20, 30, 100, 20);
+
+        campoNom = new JTextField();
+        campoNom.setBounds(20, 50, 150, 20);
+
+        label4 = new JLabel("Apellido P.");
+        label4.setBounds(210, 30, 100, 20);
+
+        campoAP = new JTextField();
+        campoAP.setBounds(210, 50, 150, 20);
+
+        label5 = new JLabel("Apellido M.");
+        label5.setBounds(20, 90, 100, 20);
+
+        campoAM = new JTextField();
+        campoAM.setBounds(20, 110, 150, 20);
+
+        label6 = new JLabel("Saldo");
+        label6.setBounds(210, 90, 100, 20);
+
+        campoSaldo = new JTextField();
+        campoSaldo.setBounds(210, 110, 150, 20);
+
+        botonAlta = new JButton("Registrar");
+        botonAlta.setBounds(450, 100, 100, 30);
+        botonAlta.addActionListener(this);
+
+        panel4.add(label3);
+        panel4.add(campoNom);
+        panel4.add(label4);
+        panel4.add(campoAP);
+        panel4.add(label5);
+        panel4.add(campoAM);
+        panel4.add(label6);
+        panel4.add(campoSaldo);
+        panel4.add(botonAlta);
+
         //elementos de panel 3
         panel3 = new JPanel();
         panel3.setBounds(10, 170, 500, 150);
+        
         title3 = BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Registros de usuarios");
         title3.setTitlePosition(TitledBorder.ABOVE_TOP);
         panel3.setBorder(title3);
@@ -301,6 +343,7 @@ public class Formulario extends JFrame implements ActionListener{
         modelo2 = new DefaultTableModel(){
             public boolean isCellEditable(int rowIndex,int columnIndex){return false;}
         };
+        
         modelo2.addColumn("ID de usuario");
         modelo2.addColumn("Nombre");
         modelo2.addColumn("Apellido P.");
@@ -316,69 +359,14 @@ public class Formulario extends JFrame implements ActionListener{
 
         panel3.add(scroll2);
 
-        label3 = new JLabel();
-        label3.setBounds(520, 25, 100, 20);
-        label3.setText("Nombre(s)");
 
-        campoNom = new JTextField();
-        campoNom.setBounds(520, 45, 120, 20);
-
-        label4 = new JLabel();
-        label4.setBounds(520, 75, 100, 20);
-        label4.setText("Apellido P.");
-
-        campoAP = new JTextField();
-        campoAP.setBounds(520, 95, 120, 20);
-
-        label5 = new JLabel();
-        label5.setBounds(520, 125, 100, 20);
-        label5.setText("Apellido M.");
-
-        campoAM = new JTextField();
-        campoAM.setBounds(520, 145, 120, 20);
-
-        label6 = new JLabel();
-        label6.setBounds(520, 175, 100, 20);
-        label6.setText("Saldo");
-
-        campoSaldo = new JTextField();
-        campoSaldo.setBounds(520, 195, 120, 20);
-
-        botonAlta = new JButton("Registrar");
-        botonAlta.setBounds(530, 255, 100, 30);
-        botonAlta.addActionListener(this);
-
-        //elementos de panel 4
-        panel4 = new JPanel();
-        panel4.setBounds(10, 20, 500, 150);
-
-        title4 = BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Datos de usuario");
-        title4.setTitlePosition(TitledBorder.ABOVE_TOP);
-        panel4.setBorder(title4);
-        panel4.setLayout(null);
-
-        labelCodBar = new JLabel();
-        labelCodBar.setBounds(5, 20, 365, 122);
-        labelCodBar.setText("");
-
-        botonGuardar = new JButton("Guardar");
-        botonGuardar.setBounds(390, 120, 100, 20);
-        botonGuardar.addActionListener(this);
-
-        panel4.add(labelCodBar);
-        panel4.add(botonGuardar);
+        botonActualizar2 = new JButton("Actualizar");
+        botonActualizar2.setBounds(530, 200, 100, 30);
+        botonActualizar2.addActionListener(this);
 
         altasPan.add(panel3);
-        altasPan.add(label3);
-        altasPan.add(campoNom);
-        altasPan.add(label4);
-        altasPan.add(campoAP);
-        altasPan.add(label5);
-        altasPan.add(campoAM);
-        altasPan.add(label6);
-        altasPan.add(campoSaldo);
-        altasPan.add(botonAlta);
         altasPan.add(panel4);
+        altasPan.add(botonActualizar2);
 
         //panel 4 de edicion
         editarPan = new JPanel();
@@ -445,8 +433,6 @@ public class Formulario extends JFrame implements ActionListener{
                                         botonEditar.setEnabled(true);
                                         botonEliminar.setEnabled(true);
                                         botonGuardarE.setEnabled(true);
-                                        
-                                        generarCodigoBarras(padLeftZeros(res.getString("id_usuario"), 10), labelCodBarE);
             
                                         stmt.close();
                                         conexion.close();
@@ -544,26 +530,6 @@ public class Formulario extends JFrame implements ActionListener{
         campoIDE.setBounds(180, 100, 150, 20);
         campoIDE.setEnabled(false);
         
-        panel7 = new JPanel();
-        panel7.setBounds(340, 20, 280, 160);
-
-        title7 = BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Codigo de barras");
-        title7.setTitlePosition(TitledBorder.ABOVE_TOP);
-
-        labelCodBarE = new JLabel();
-        labelCodBarE.setBounds(5, 20, 270, 100);
-        labelCodBarE.setText("");
-
-        botonGuardarE = new JButton("Guardar");
-        botonGuardarE.setBounds(15, 130, 100, 20);
-        botonGuardarE.setEnabled(false);
-        botonGuardarE.addActionListener(this);
-
-        panel7.add(labelCodBarE);
-        panel7.add(botonGuardarE);
-
-        panel7.setBorder(title7);
-        panel7.setLayout(null);
         panel6.add(label8);
         panel6.add(campoNomE);
         panel6.add(label9);
@@ -574,7 +540,6 @@ public class Formulario extends JFrame implements ActionListener{
         panel6.add(campoSaldoE);
         panel6.add(label12);
         panel6.add(campoIDE);
-        panel6.add(panel7);
 
         editarPan.add(panel5);
         editarPan.add(panel6);
@@ -587,7 +552,6 @@ public class Formulario extends JFrame implements ActionListener{
         opcionesPanel.addTab("Admin. usuarios", editarPan);
         
         this.add(opcionesPanel);
-
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -601,7 +565,7 @@ public class Formulario extends JFrame implements ActionListener{
 
             if(conexion != null){
                 try{
-                    stmt = conexion.prepareStatement("SELECT * FROM registros");
+                    stmt = conexion.prepareStatement("SELECT * FROM registros ORDER BY id_registro ASC");
                     ResultSet res = stmt.executeQuery();      
                     
                     limpiarTabla(tablaRegistros);
@@ -671,94 +635,131 @@ public class Formulario extends JFrame implements ActionListener{
         }
         
         if(e.getSource() == botonAlta){
-            
-            float saldo = 0;
-            Connection conexion;
             PreparedStatement stmt;
-            String[] resRow = {"", "", "", "", ""};
-            String nom, ap1, ap2;
+            Connection conexion;
 
-            if(!campoNom.getText().trim().isEmpty() && !campoAP.getText().trim().isEmpty() && !campoAM.getText().trim().isEmpty() 
-               && !campoSaldo.getText().trim().isEmpty()){
-
-                try {
-                    saldo = Float.parseFloat(campoSaldo.getText());
-                } catch (Exception errorConv2) {
-                    JOptionPane.showMessageDialog(this, "dato ingresado no valido en el campo de saldo: " + errorConv2.getMessage(), "Error de argumento", JOptionPane.ERROR_MESSAGE);
+            float saldo = 0;
+            int IDTarjeta = 0;
+            
+            //evaluamos si todos los campos ya estan llenos 
+            if(!campoNom.getText().trim().isEmpty() && !campoAP.getText().trim().isEmpty() 
+            && !campoAM.getText().trim().isEmpty() && !campoSaldo.getText().trim().isEmpty()){
+                
+                //evaluamos si el campo de saldo tiene el formato correcto
+                try{
+                    saldo = Float.parseFloat(campoSaldo.getText().trim());
+                }catch(NumberFormatException ex){
+                    JOptionPane.showMessageDialog(this, "dato ingresado no valido en el campo de saldo: " + ex.getMessage(), "Error de argumento ", JOptionPane.ERROR_MESSAGE);
+                    campoNom.setText("");campoAP.setText("");campoAM.setText("");campoSaldo.setText("");
+                    return;
+                    
+                }
+                //evaluamos si la ventana de dialogo tiene el formato correcto para el ID de tarjeta 
+                try{
+                    IDTarjeta = Integer.parseInt(JOptionPane.showInputDialog("Presente tarjeta en el sensor"));
+                }catch(NumberFormatException ex){
+                    JOptionPane.showMessageDialog(this, "dato ingresado no valido en el campo de saldo: " + ex.getMessage(), "Error de argumento ", JOptionPane.ERROR_MESSAGE);
+                    campoNom.setText("");campoAP.setText("");campoAM.setText("");campoSaldo.setText("");
                     return;
                 }
-                
-
+                //inciamos la conexion con el servidor 
                 conexion = conn.initConexion();
-                
-                if(conexion != null){
 
-
-                    nom = campoNom.getText().trim();
-                    ap1 = campoAP.getText().trim();
-                    ap2 = campoAM.getText().trim();
-                    try{
-
-                        stmt = conexion.prepareStatement("INSERT INTO usuarios(nombre, apellidoM, apellidoP, saldo) values(?, ?, ?, ?)");
-                        stmt.setString(1, nom);
-                        stmt.setString(2, ap1);
-                        stmt.setString(3, ap2);
-                        stmt.setFloat(4, saldo);
-
-                        if(stmt.executeUpdate() >= 0){
-                            stmt = conexion.prepareStatement("SELECT * FROM usuarios");
-                            
-                            ResultSet res = stmt.executeQuery();      
-                            
-                            limpiarTabla(tablaUsuarios);
-        
-                            while(res.next()){
-        
-                                resRow[0] = padLeftZeros(res.getString("id_usuario"), 10);
-                                resRow[1] = res.getString("nombre");
-                                resRow[2] = res.getString("apellidoP");
-                                resRow[3] = res.getString("apellidoM");
-                                resRow[4] = res.getString("saldo");
-
-                                modelo2.addRow(resRow);
-                            }
-                         
-                            tablaUsuarios.setModel(modelo2);
-                            generarCodigoBarras(resRow[0], labelCodBar);
-
-                            JOptionPane.showMessageDialog(null, "Usuario creado con exito","Usuario creado", JOptionPane.INFORMATION_MESSAGE);  
-                            
-                            campoNom.setText("");      
-                            campoAP.setText("");
-                            campoAM.setText("");
-                            campoSaldo.setText("");
-                            
-                            conexion.close();
-                            stmt.close();
-                            
-                        }else{
-
-                            JOptionPane.showMessageDialog(this, "Error al crear usuario", "Error de insercion", JOptionPane.ERROR_MESSAGE);
-                            conexion.close();
-                            stmt.close();
-
-                        }
-    
-                    }catch(SQLException errorSQL){
-                        JOptionPane.showMessageDialog(this, "Error al consultar con la base de datos: " + errorSQL.getMessage(), "Error de consulta", JOptionPane.ERROR_MESSAGE);
-                    }
-                }else{
+                if(conexion == null){
                     JOptionPane.showMessageDialog(this, "Error al conectar con el dispositivo", "Conexion Fallida", JOptionPane.ERROR_MESSAGE);
+                    campoNom.setText("");campoAP.setText("");campoAM.setText("");campoSaldo.setText("");
+                    return;
+                }
+                //evaluamos si el ID de tarjeta ya esta relacionada con algun usuario 
+                try{
+                    stmt = conexion.prepareStatement("SELECT * FROM usuarios WHERE id_usuario = ?");
+                    stmt.setInt(1, IDTarjeta);
+                    
+                    ResultSet res = stmt.executeQuery();   
+                    //en caso de que ei ID esta registrado NO creamos el usuario y regresamos 
+                    int NumFilas = 0;
+                    
+                    while(res.next()){
+                        NumFilas++;
+                    }
+                    if(NumFilas > 0){
+                        JOptionPane.showMessageDialog(this, "ID de tarjeta duplicado", "ID duplicado", JOptionPane.ERROR_MESSAGE);
+                        campoNom.setText("");campoAP.setText("");campoAM.setText("");campoSaldo.setText("");
+                        return;  
+                    }
+
+                }catch(SQLException errorSQL){
+                    JOptionPane.showMessageDialog(this, "error al consultar con la base de datos: " + errorSQL.getMessage(), "Error de consulta", JOptionPane.ERROR_MESSAGE);
+                    campoNom.setText("");campoAP.setText("");campoAM.setText("");campoSaldo.setText("");
+                    return;
+                }
+                //creamos un nuevo usuario con el ID de la tarjeta 
+                try{
+                    stmt = conexion.prepareStatement("SELECT insertarUsuario(?, ?, ?, ?, ?)");
+                    stmt.setInt(1, IDTarjeta);
+                    stmt.setString(2, campoNom.getText());
+                    stmt.setString(3, campoAP.getText());
+                    stmt.setString(4, campoAM.getText());
+                    stmt.setFloat(5, saldo);
+                    
+                    
+                    if(!stmt.execute()){
+                        JOptionPane.showMessageDialog(this, "error al crear usuario", "Error de creacion de usuario", JOptionPane.ERROR_MESSAGE);
+                        campoNom.setText("");campoAP.setText("");campoAM.setText("");campoSaldo.setText("");
+                        return;  
+                    }
+                    JOptionPane.showMessageDialog(null, "Usuario creado con exito", "Proceso completado", JOptionPane.INFORMATION_MESSAGE);
+
+                }catch(SQLException errorSQL){
+                    JOptionPane.showMessageDialog(this, "error al consultar con la base de datos: " + errorSQL.getMessage(), "Error de consulta", JOptionPane.ERROR_MESSAGE);
+                    campoNom.setText("");campoAP.setText("");campoAM.setText("");campoSaldo.setText("");
+                    return;
                 }
             }else{
-                JOptionPane.showMessageDialog(this, "Todos los campos deben ser completados", "Formulario incompleto", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Deben de ingresarse todos los datos", "Error de argumentos", JOptionPane.ERROR_MESSAGE);
+                campoNom.setText("");campoAP.setText("");campoAM.setText("");campoSaldo.setText("");
+                
             }
 
         }
 
-        if(e.getSource() == botonGuardar){
-            guardarImagen(imageCodigoBarras, labelCodBar);
+        if(e.getSource() == botonActualizar2){
+            String[] resRow = {"", "", "", "", ""};
+            PreparedStatement stmt;
+            Connection conexion;
 
+            conexion = conn.initConexion();
+
+            if(conexion != null){
+                try{
+                    stmt = conexion.prepareStatement("SELECT * FROM usuarios ORDER BY id_usuario ASC");
+                    ResultSet res = stmt.executeQuery();      
+                    
+                    limpiarTabla(tablaUsuarios);
+
+                    while(res.next()){
+
+                        resRow[0] = padLeftZeros(res.getString("id_usuario"), 10);
+                        resRow[1] = res.getString("nombre");
+                        resRow[2] = res.getString("apellidoP");
+                        resRow[3] = res.getString("apellidoM");
+                        resRow[4] = res.getString("saldo");
+
+                        modelo2.addRow(resRow);
+                    }
+                    
+                    tablaUsuarios.setModel(modelo2);
+
+
+                    conexion.close();
+                    stmt.close();
+
+                }catch(SQLException errorSQL){
+                    JOptionPane.showMessageDialog(this, "error al consultar con la base de datos: " + errorSQL.getMessage(), "Error de consulta", JOptionPane.ERROR_MESSAGE);
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "Error al conectar con el dispositivo", "Conexion Fallida", JOptionPane.ERROR_MESSAGE);
+            }
         }
      
         if(e.getSource() == botonEditar){
@@ -887,9 +888,6 @@ public class Formulario extends JFrame implements ActionListener{
             campoBusqedaEdit.requestFocus();
         }
     
-        if(e.getSource() == botonGuardarE){
-            guardarImagen(imageCodigoBarras, labelCodBarE);
-        }
     }
 
     public void incializarTabla(){
@@ -993,56 +991,6 @@ public class Formulario extends JFrame implements ActionListener{
             }
         }else{
             JOptionPane.showMessageDialog(this, "Error al conectar con el dispositivo", "Conexion Fallida", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
-    public void generarCodigoBarras(String contenido, JLabel labelCode){
-        JBarcodeBean codigoBarras = new JBarcodeBean();
-        codigoBarras.setCode(contenido);
-        //codigoBarras.setCodeType(new Code128());
-
-        imageCodigoBarras = codigoBarras.draw(new BufferedImage(labelCode.getWidth(), labelCode.getHeight(), BufferedImage.TYPE_INT_RGB));
-        ImageIcon iconCodBar = new ImageIcon(new ImageIcon(imageCodigoBarras).getImage().getScaledInstance(labelCode.getWidth(), labelCode.getHeight(), 0));
-
-        labelCode.setIcon(iconCodBar);
-    }
-
-    public boolean guardarImagen(BufferedImage imagen, JLabel labelCodBar){
-        
-        if(labelCodBar.getIcon() == null){
-            
-            JOptionPane.showMessageDialog(this, "No se puede guardar una imagen vacia", "Imagen no generada", JOptionPane.INFORMATION_MESSAGE);
-            return false;
-        }else{
-            
-            JFileChooser chooser = new JFileChooser();
-            FileNameExtensionFilter filter = new FileNameExtensionFilter("Image","png");
-
-            chooser.setFileFilter(filter);
-            chooser.setDialogTitle("Guardar codigo de barras");
-            chooser.setMultiSelectionEnabled(false);
-            chooser.setAcceptAllFileFilterUsed(false);
-
-            if(chooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION){
-                    
-                File file = chooser.getSelectedFile();
-
-                if(!file.toString().endsWith(".png")){
-                    file = new File(chooser.getSelectedFile() + ".png");
-                }
-
-                try {
-                    ImageIO.write(imagen, "png", file);
-                    JOptionPane.showMessageDialog(null, "El codigo de barras fue exportado con exito","Imagen exportada", JOptionPane.INFORMATION_MESSAGE);
-                    labelCodBar.setIcon(null);
-                    return true;
-                } catch (IOException e) {
-                    JOptionPane.showMessageDialog(null, "Error al generar imagen " + e.getMessage(), "Error al exportar imagen", JOptionPane.ERROR_MESSAGE);
-                    return false;
-                }
-            }else{
-                return false;
-            }
         }
     }
 
