@@ -352,7 +352,7 @@ public class Formulario extends JFrame implements ActionListener{
         panel4 = new JPanel();
         panel4.setBounds(10, 20, 500, 150);
 
-        title4 = BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Codigo de barras");
+        title4 = BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Datos de usuario");
         title4.setTitlePosition(TitledBorder.ABOVE_TOP);
         panel4.setBorder(title4);
         panel4.setLayout(null);
