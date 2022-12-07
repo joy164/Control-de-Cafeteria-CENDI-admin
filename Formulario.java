@@ -35,7 +35,8 @@ public class Formulario extends JFrame implements ActionListener{
 
     //elementos generales de ventana
     private JLabel imagen;
-    public JPanel recargasPan, registrosPan, altasPan, editarPan;
+    public JPanel recargasPan, registrosPan, altasPan, editarPan, configPan;
+    private Config conf = new Config();
 
     //elementos de ventana panel 1
     
@@ -64,11 +65,19 @@ public class Formulario extends JFrame implements ActionListener{
     private JButton botonAlta, botonActualizar2;
 
     //elementos de ventana panel 4
-    public JTextField campoBusqedaEdit, campoNomE, campoAPE, campoAME, campoSaldoE, campoIDE;
+    public JTextField campoBusqedaEdit;
+    private JTextField campoNomE, campoAPE, campoAME, campoSaldoE, campoIDE;
     private JLabel label7, label8, label9, label10, label11, label12;
-    private JButton botonEliminar, botonEditar, botonGuardarE;
-    private TitledBorder title5, title6, title7;
-    private JPanel panel5, panel6, panel7;
+    private JButton botonEliminar, botonEditar;
+    private TitledBorder title5, title6;
+    private JPanel panel5, panel6;
+
+    //elementos de ventana panel 5 
+    private JTextField campoServidor, campoUsuario, campoPassword, campoPrecio;
+    private JLabel label13, label14, label15, label16, label17;
+    private JButton botonEditarConf;
+    private TitledBorder title7;
+    private JPanel panel7;
 
     //base de datos
     Conn conn = new Conn();
@@ -159,6 +168,8 @@ public class Formulario extends JFrame implements ActionListener{
                                         } catch (NumberFormatException errorConv2) {
                                             JOptionPane.showMessageDialog(null, "dato ingresado no valido en el campo de saldo: " + errorConv2.getMessage(), "Error de argumento", JOptionPane.ERROR_MESSAGE);
                                             
+                                        } catch(NullPointerException errorConv3){
+                                            JOptionPane.showMessageDialog(null, "dato ingresado no valido en el campo de saldo: " + errorConv3.getMessage(), "Error de argumento", JOptionPane.ERROR_MESSAGE);  
                                         }
                 
                                         stmt = conexion.prepareStatement("UPDATE usuarios set saldo = ? WHERE id_usuario = ?");
@@ -219,17 +230,14 @@ public class Formulario extends JFrame implements ActionListener{
         id1.setBounds(20, 20, 200, 30);
         id1.setText("ID:");
 
-        nom1 = new JLabel();
+        nom1 = new JLabel("Nombre:");
         nom1.setBounds(20, 50, 200, 30);
-        nom1.setText("Nombre:");
 
-        saldoA1 = new JLabel();
+        saldoA1 = new JLabel("Saldo Anterior: $");
         saldoA1.setBounds(20, 80, 200, 30);
-        saldoA1.setText("Saldo Actual: $");
 
-        saldoN1 = new JLabel();
+        saldoN1 = new JLabel("Saldo Nuevo: $");
         saldoN1.setBounds(230, 80, 200, 30);
-        saldoN1.setText("Saldo Nuevo: $");
 
         panel1.add(id1);
         panel1.add(nom1);
@@ -254,6 +262,7 @@ public class Formulario extends JFrame implements ActionListener{
         modelo = new DefaultTableModel(){
             public boolean isCellEditable(int rowIndex,int columnIndex){return false;}
         };
+
         modelo.addColumn("# REGISTRO");
         modelo.addColumn("ID de usuario");
         modelo.addColumn("Nombre");
@@ -432,7 +441,6 @@ public class Formulario extends JFrame implements ActionListener{
                                         campoSaldoE.setEnabled(true);
                                         botonEditar.setEnabled(true);
                                         botonEliminar.setEnabled(true);
-                                        botonGuardarE.setEnabled(true);
             
                                         stmt.close();
                                         conexion.close();
@@ -458,12 +466,10 @@ public class Formulario extends JFrame implements ActionListener{
                 @Override
                 public void keyTyped(KeyEvent e) {
                     
-
                 }
 
                 @Override
                 public void keyReleased(KeyEvent e) {
-                
 
                 }
             }
@@ -544,12 +550,175 @@ public class Formulario extends JFrame implements ActionListener{
         editarPan.add(panel5);
         editarPan.add(panel6);
         
+        //panel 5 de configuracion 
+        configPan = new JPanel();
+        configPan.setLayout(null);
+        //elementos del panel 5
+        panel7 = new JPanel();
+        panel7.setBounds(10, 20, 635, 250);
+
+        title7 = BorderFactory.createTitledBorder( BorderFactory.createEtchedBorder(EtchedBorder.LOWERED), "Configuraciones");
+        title7.setTitlePosition(TitledBorder.ABOVE_TOP);
+        panel7.setBorder(title7);
+        panel7.setLayout(null);
+
+        botonEditarConf = new JButton("Editar");
+        botonEditarConf.setBounds(500, 30, 100, 30); 
+        botonEditarConf.addActionListener(this);
+        
+        label17 = new JLabel("<html><p>Presione enter por cada campo para guardar<p><html>");
+        label17.setBounds(300, 10, 200, 80);
+
+        label13 = new JLabel("Direccion IPv4");
+        label13.setBounds(20, 30, 200, 30);
+        campoServidor = new JTextField(conf.obtenerIPservidor());
+        campoServidor.setBounds(20, 60, 200, 20);
+        campoServidor.setEnabled(false);
+        campoServidor.addKeyListener(
+            new KeyListener(){
+                @Override
+                public void keyPressed(KeyEvent e){
+
+                    if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                        try {
+                            conf.cambiarIPservidor(campoServidor.getText());   
+                            JOptionPane.showMessageDialog(null, "Direccion IP cambiada con exito","Direccion IP cambiada", JOptionPane.INFORMATION_MESSAGE); 
+                            campoServidor.setEnabled(false); 
+                        } catch (Exception error) {
+                            campoServidor.setText(conf.obtenerIPservidor());
+                            JOptionPane.showMessageDialog(null, "IP ingresada no valida: " + error.getMessage(), "Error de argumento", JOptionPane.ERROR_MESSAGE);
+                        }
+                       
+                    }
+                }
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    
+
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+                
+
+                }
+            }
+        );
+        
+        label14 = new JLabel("Usuario de servidor");
+        label14.setBounds(20, 80, 200, 30);
+        campoUsuario = new JTextField(conf.obtenerUsuario());
+        campoUsuario.setBounds(20, 110, 200, 20);
+        campoUsuario.setEnabled(false);
+        campoUsuario.addKeyListener(
+            new KeyListener(){
+                @Override
+                public void keyPressed(KeyEvent e){
+
+                    if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                        conf.cambiarUsuario(campoUsuario.getText());  
+                        JOptionPane.showMessageDialog(null, "Usuario de base de datos cambiada con exito","Usuario cambiado", JOptionPane.INFORMATION_MESSAGE); 
+                        campoUsuario.setEnabled(false); 
+                    }
+                }
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+
+                }
+            }
+        );
+
+        label15 = new JLabel("Contraseña de servidor");
+        label15.setBounds(20, 130, 200, 30);
+        campoPassword = new JTextField(conf.obtenerClaveBD());
+        campoPassword.setBounds(20, 160, 200, 20);
+        campoPassword.setEnabled(false);
+        campoPassword.addKeyListener(
+            new KeyListener(){
+                @Override
+                public void keyPressed(KeyEvent e){
+
+                    if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                        conf.cambiarClaveBD(campoPassword.getText());  
+                        JOptionPane.showMessageDialog(null, "Contraseña de base de datos cambiada con exito","Contraseña cambiada", JOptionPane.INFORMATION_MESSAGE); 
+                        campoPassword.setEnabled(false); 
+                    }
+                }
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+
+                }
+            }
+        );
+        
+        label16 = new JLabel("Precio de comida");
+        label16.setBounds(20, 180, 200, 30);
+        campoPrecio = new JTextField(Float.toString(conf.obtenerPrecio()));
+        campoPrecio.setBounds(20, 210, 200, 20);
+        campoPrecio.setEnabled(false);
+        campoPrecio.addKeyListener(
+            new KeyListener(){
+                @Override
+                public void keyPressed(KeyEvent e){
+
+                    if(e.getKeyCode() == KeyEvent.VK_ENTER){
+                        try{
+                            float precioNuevo = Float.parseFloat(campoPrecio.getText());
+                            conf.cambiarPrecio(precioNuevo);
+                            JOptionPane.showMessageDialog(null, "Precio cambiado con exito","Precio cambiado", JOptionPane.INFORMATION_MESSAGE); 
+                            campoPrecio.setEnabled(false);
+
+                        }catch(NumberFormatException error){
+                            campoPrecio.setText(Float.toString(conf.obtenerPrecio()));
+                            JOptionPane.showMessageDialog(null, "El precio ingresado no es valido: " + error.getMessage(), "Error de argumento", JOptionPane.ERROR_MESSAGE);
+                        }
+
+                        
+                    }
+                }
+                @Override
+                public void keyTyped(KeyEvent e) {
+                    
+                }
+
+                @Override
+                public void keyReleased(KeyEvent e) {
+
+                }
+            }
+        );
+
+        panel7.add(label17);
+        panel7.add(botonEditarConf);
+        panel7.add(label13);
+        panel7.add(campoServidor);
+        panel7.add(label14);
+        panel7.add(campoUsuario);
+        panel7.add(label15);
+        panel7.add(campoPassword);
+        panel7.add(label16);
+        panel7.add(campoPrecio);
+
+        configPan.add(panel7);
+
 
         //creacion de pestañas del panel principal
+        
         opcionesPanel.addTab("Recagar",recargasPan);
         opcionesPanel.addTab("Registros de cafeteria",registrosPan);
         opcionesPanel.addTab("Registrar usuario",altasPan);
         opcionesPanel.addTab("Admin. usuarios", editarPan);
+        opcionesPanel.addTab("Configuracion", configPan);
         
         this.add(opcionesPanel);
     }
@@ -887,6 +1056,27 @@ public class Formulario extends JFrame implements ActionListener{
 
             campoBusqedaEdit.requestFocus();
         }
+        
+        if(e.getSource() == botonEditarConf){
+
+            try{
+                int IDTarjeta = Integer.parseInt(JOptionPane.showInputDialog("Presente tarjeta maestra"));
+
+                if(IDTarjeta == 6677604){
+                    campoServidor.setEnabled(true);
+                    campoUsuario.setEnabled(true);
+                    campoPassword.setEnabled(true);
+                    campoPrecio.setEnabled(true);
+                }else{
+                    JOptionPane.showMessageDialog(this, "La tarjeta no es una tarjeta maestra", "Tarjeta incorrecata", JOptionPane.ERROR_MESSAGE);
+                } 
+
+            }catch(NumberFormatException error){
+                JOptionPane.showMessageDialog(this, "ID no valido", "Tarjeta incorrecata", JOptionPane.ERROR_MESSAGE);
+            }
+            
+            
+        }
     
     }
 
@@ -1006,6 +1196,4 @@ public class Formulario extends JFrame implements ActionListener{
     
         return sb.toString();
     }
-
-
 }

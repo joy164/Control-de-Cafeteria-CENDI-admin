@@ -3,17 +3,18 @@ import java.sql.SQLException;
 import java.sql.DriverManager;
 
 public class Conn{
+    //creamos el objeto de la clase de configuracion para acceder a las variables guardadas previamente 
+    Config conf = new Config();
+
     /* Declaramos 4 variables con el driver, la bbdd, usuario y contraseña*/
     private static final String driver="com.mysql.cj.jdbc.Driver";
-    private static final String bbdd="jdbc:mysql://localhost:3306/CENDI";
-    //private static final String bbdd="jdbc:mysql://192.168.1.73:3306/CENDI";
-    private static final String usuario ="root";
-    //private static final String usuario ="contaduriaCENDI";
-    private static final String clave="2019601919jJ+";
+    private String server = conf.obtenerIPservidor();
+    private String bbdd="jdbc:mysql://"+server+":3306/CENDI";
+    private String usuario =conf.obtenerUsuario();
+    private String clave= conf.obtenerClaveBD();
 
-    public Conn(){
-        
-    }
+    public Conn(){}
+
     /* Creamos el método para conectarnos a la base de datos. Este método
     devolverá un objeto de tipo Connection.*/
     public Connection initConexion(){
@@ -30,8 +31,7 @@ public class Conn{
          
         // Si hay errores informamos al usuario. 
         } catch (Exception e) {
-            System.out.println("Error: "
-                    + e.getMessage());
+            System.out.println("Error: "+ e.getMessage());
         }
         // Devolvemos la conexión.
         return conex;

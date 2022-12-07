@@ -9,12 +9,13 @@ public class Main{
         Connection c = null;
 
         c = conn.initConexion();
+        Formulario form1 = new Formulario();
+
+        form1.setVisible(true);
+        form1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         if(c != null){
-            Formulario form1 = new Formulario();
-
-            form1.setVisible(true);
-            form1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            
             if(form1.editarPan.isShowing()){
                 form1.campoBusqedaEdit.requestFocus();
             }
@@ -23,8 +24,8 @@ public class Main{
             }
 
         }else{
-            JOptionPane.showMessageDialog(null, "Error al conectar con el dispositivo al inciar programa", "Conexion Fallida", JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
+            JOptionPane.showMessageDialog(null, "Error al conectar con el dispositivo al inciar programa, revise configuracion y reinicie programa", "Conexion Fallida", JOptionPane.ERROR_MESSAGE);
+            form1.opcionesPanel.setSelectedComponent(form1.configPan);
         }
 
 
